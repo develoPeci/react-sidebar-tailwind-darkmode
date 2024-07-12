@@ -1,65 +1,81 @@
-import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-
-import { BsArrowLeftCircle } from 'react-icons/bs'
-import { AiFillPieChart } from 'react-icons/ai'
-import { SiFuturelearn } from 'react-icons/si'
-import { SiOpenaccess } from 'react-icons/si'
-import { CgProfile } from 'react-icons/cg'
-import Logo from '../assets/images/logo.svg'
-import HamburgerButton from './HamburgerMenuButton/HamburgerButton'
+import React, { useState, useContext } from "react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  IoFolderOutline,
+  IoFolderSharp,
+  IoSettingsOutline,
+  IoSettings,
+  IoHomeOutline,
+  IoHome,
+} from "react-icons/io5";
+import { FaUserGraduate } from "react-icons/fa";
+import Logo from "../assets/images/logo.svg";
+import { ThemeContext } from "../components/ThemeContext";
+import HamburgerButton from "./HamburgerMenuButton/HamburgerButton";
 
 const Sidebar = () => {
-  const [open, setOpen] = useState(true)
-  const [mobileMenu, setMobileMenu] = useState(false)
-  const location = useLocation()
+  const { theme } = useContext(ThemeContext);
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const location = useLocation();
 
   const Menus = [
-    { title: 'Dashboard', path: '/dashboard', src: <AiFillPieChart /> },
-    { title: 'Course', path: '/course', src: <SiFuturelearn /> },
-    { title: 'Profile', path: '/profile', src: <CgProfile /> },
-    { title: 'Signin', path: '/login', src: <SiOpenaccess />, gap: 'true' },
-  ]
+    {
+      title: "Dashboard",
+      path: "/home",
+      src: <IoHomeOutline />,
+      activeSrc: <IoHome />,
+    },
+    {
+      title: "My Course",
+      path: "/course",
+      src: <FaUserGraduate />,
+      activeSrc: <FaUserGraduate />,
+    },
+    {
+      title: "Resources",
+      path: "/resources",
+      src: <IoFolderOutline />,
+      activeSrc: <IoFolderSharp />,
+    },
+    {
+      title: "My Account",
+      path: "/MyAccount",
+      src: <IoSettingsOutline />,
+      activeSrc: <IoSettings />,
+    },
+  ];
 
   return (
     <>
-      <div
-        className={`${
-          open ? 'w-60' : 'w-fit'
-        } hidden sm:block relative h-screen duration-300 bg-gray-100 border-r border-gray-200 dark:border-gray-600 p-5 dark:bg-slate-800`}
-      >
-        <BsArrowLeftCircle
-          className={`${
-            !open && 'rotate-180'
-          } absolute text-3xl bg-white fill-slate-800  rounded-full cursor-pointer top-9 -right-4 dark:fill-gray-400 dark:bg-gray-800`}
-          onClick={() => setOpen(!open)}
-        />
-        <Link to='/'>
-          <div className={`flex ${open && 'gap-x-4'} items-center`}>
-            <img src={Logo} alt='' className='pl-2' />
-            {open && (
-              <span className='text-xl font-medium whitespace-nowrap dark:text-white'>
-                Goal Quest
-              </span>
-            )}
+      <div className="fixed z-40 top-0 left-0 h-full w-60 hidden sm:block bg-blanco border-r border-gray-100 dark:border-gray-600 p-5 dark:bg-slate-800">
+        <Link to="/home">
+          <div className="flex gap-x-4 items-center">
+            <img
+              src={theme === "dark" ? Logo : Logo}
+              alt="Logo"
+              className="pl-8 h-14"
+            />
           </div>
         </Link>
-
-        <ul className='pt-6'>
+        <ul className="pt-6">
           {Menus.map((menu, index) => (
             <Link to={menu.path} key={index}>
               <li
-                className={`flex items-center gap-x-6 p-3 text-base font-normal rounded-lg cursor-pointer dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700
-                        ${menu.gap ? 'mt-9' : 'mt-2'} ${
-                  location.pathname === menu.path &&
-                  'bg-gray-200 dark:bg-gray-700'
+                className={`flex items-center gap-x-6 p-3 text-base font-normal rounded-lg cursor-pointer dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transform hover:scale-105 transition duration-100 ease-in-out
+                        ${menu.gap ? "mt-9" : "mt-2"} ${
+                  location.pathname.startsWith(menu.path) &&
+                  "bg-dorado hover:bg-dorado dark:bg-gray-700"
                 }`}
               >
-                <span className='text-2xl'>{menu.src}</span>
+                <span className="text-2xl ">
+                  {location.pathname.startsWith(menu.path)
+                    ? menu.activeSrc
+                    : menu.src}
+                </span>
                 <span
-                  className={`${
-                    !open && 'hidden'
-                  } origin-left duration-300 hover:block`}
+                  className={`origin-left hover:block ${
+                    location.pathname.startsWith(menu.path) ? "font-bold" : ""
+                  }`}
                 >
                   {menu.title}
                 </span>
@@ -68,18 +84,16 @@ const Sidebar = () => {
           ))}
         </ul>
       </div>
+
       {/* Mobile Menu */}
       <div className="pt-3">
-        <HamburgerButton
-          setMobileMenu={setMobileMenu}
-          mobileMenu={mobileMenu}
-        />
+        <HamburgerButton setMobileMenu={setMobileMenu} mobileMenu={mobileMenu} />
       </div>
-      <div className="sm:hidden">
+      <div className="sm:hidden z-50">
         <div
           className={`${
-            mobileMenu ? 'flex' : 'hidden'
-          } absolute z-50 flex-col items-center self-end py-8 mt-16 space-y-6 font-bold sm:w-auto left-6 right-6 dark:text-white  bg-gray-50 dark:bg-slate-800 drop-shadow md rounded-xl`}
+            mobileMenu ? "flex" : "hidden"
+          } transition-all:0.5s; absolute z-50 flex-col items-center self-end py-14 mt-20 space-y-6 font-bold sm:w-10 left-0 right-0 dark:text-white bg-gray-50 dark:bg-slate-800 drop-shadow-md `}
         >
           {Menus.map((menu, index) => (
             <Link
@@ -89,8 +103,8 @@ const Sidebar = () => {
             >
               <span
                 className={` ${
-                  location.pathname === menu.path &&
-                  'bg-gray-200 dark:bg-gray-700'
+                  location.pathname.startsWith(menu.path) &&
+                  "bg-gray-200 dark:bg-gray-700"
                 } p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700`}
               >
                 {menu.title}
@@ -100,7 +114,7 @@ const Sidebar = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
