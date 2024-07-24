@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from "react";
 import Toggle from "./ThemeToggle";
+import { useSelector } from "react-redux";
  import ImgProfile from "../assets/images/imgnofound.png";
 // import { ThemeContext } from '../components/ThemeContext'
 // import Logo from '../assets/images/logo.svg'
@@ -11,10 +12,15 @@ import AppFirebase from "../firebase-config";
 import fetchUserData from "../components/data"
 const auth = getAuth(Appfirebase);
 
+
+
 const Navbar = ({ setLoading }) => {
 
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const {nombres,apellidos}=useSelector(state=>state.user)
+
+  console.log("nombres"+nombres+"apellidos"+apellidos)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -350,7 +356,7 @@ const Navbar = ({ setLoading }) => {
           >
             <img className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src={ImgProfile} alt="Logo"/>
 
-            <p className="">{users.nombres + " "+ users.apellidos}</p>
+            <p className="">{nombres + " "+ apellidos}</p>
             <svg
               className="w-2.5 h-2.5 ms-3"
               aria-hidden="true"
