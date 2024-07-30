@@ -10,7 +10,9 @@ const initialState = {
     VisionStatement:'',
     PurposeStatement:'',
     CoreValues:'',
-    CouncilMembers:''
+    CouncilMembers:'',
+    orden:'',
+    reload: false
 ,};
 
 export const userSlice = createSlice({
@@ -18,13 +20,15 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setUserData: (state, action) => {
-            const { uidUser, nombres, apellidos, correo, identificador, fotoDeperfil, timezone } = action.payload;
+            const { uidUser, nombres, apellidos, correo, identificador, fotoDeperfil, timezone,orden } = action.payload;
             state.uidUser = uidUser;
             state.nombres = nombres;
             state.apellidos = apellidos;
             state.correo = correo;
             state.fotoDeperfil = fotoDeperfil;
             state.timezone = timezone;
+            state.orden = orden;
+            state.reload = false;
         },
         clearUserData: (state) => {
             state.uidUser = null;
@@ -34,6 +38,7 @@ export const userSlice = createSlice({
             state.identificador = '';
             state.fotoDeperfil = '';
             state.timezone = '';
+            state.orden = "";
         },
         setContentGoals: (state, action)=>{
             const { VisionStatement,PurposeStatement,CoreValues,CouncilMembers,Goals } = action.payload;

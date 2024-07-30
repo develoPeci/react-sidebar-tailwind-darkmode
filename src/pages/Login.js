@@ -20,36 +20,36 @@ const auth = getAuth(AppFirebase);
 const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const functionAuth= async(e)=>{
+  const functionAuth = async (e) => {
     e.preventDefault();
-    const email= e.target.email.value;
-    const password= e.target.password.value;
-    setLoading(true); 
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/home'); 
+      navigate('/home');
       console.log('inicio de sesion exitoso')
     } catch (error) {
-      console.log(error.message); 
+      console.log(error.message);
       if (error.code === 'auth/user-not-found') {
         setErrorMessage('Usuario no registrado');
       } else {
         setErrorMessage('Correo o contraseña incorrectos');
       }
-    }finally{
-      setLoading(false); 
+    } finally {
+      setLoading(false);
 
     }
 
-   
-    }
+
+  }
 
 
 
@@ -116,13 +116,13 @@ const Login = () => {
             </div>
           )}
           <button className="p-2 bg-black text-white rounded-xl transition  flex items-center justify-center">
-          {loading ? 
-            <ImSpinner8 className="animate-spin text-white h-5 w-5"/>
+            {loading ?
+              <ImSpinner8 className="animate-spin text-white h-5 w-5" />
 
-               : 'Log in'
-             
+              : 'Log in'
+
             }
-                    </button>
+          </button>
 
           <div className="flex justify-center items-center gap-4">
             <div>

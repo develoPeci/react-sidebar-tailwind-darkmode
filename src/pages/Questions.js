@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserData } from '../redux/slices/userData';
 
 export default function Questions() {
+    const dispatch=useDispatch()
+    const {uidUser} = useSelector(state=>state.user)
+
     const questions = [
         {
             number: 1,
@@ -57,31 +62,31 @@ export default function Questions() {
     const content = [
         {
             id: 1,
-            nombre: 'Código Js'
+            nombre: 'Crafting Your Legacy'
         },
         {
             id: 2,
-            nombre: 'HTML'
+            nombre: 'Financial Empowerment'
         },
         {
             id: 3,
-            nombre: 'CSS'
+            nombre: 'Master planning'
         },
         {
             id: 4,
-            nombre: 'React'
+            nombre: 'Operational Efficiency'
         },
         {
             id: 5,
-            nombre: 'Bootstrap'
+            nombre: 'Target Market'
         },
         {
             id: 6,
-            nombre: 'Tailwind CSS'
+            nombre: 'Team Setup'
         },
         {
             id: 7,
-            nombre: 'Node.js'
+            nombre: 'Team dynamics'
         }
     ];
 
@@ -134,7 +139,7 @@ export default function Questions() {
         generateOrdenFinal(order);
     };
 
-    const generateOrdenFinal = (order) => {
+    const generateOrdenFinal = async (order) => {
         const ordenFinal = order.map(num => {
             const contentItem = content.find(item => item.id === num);
             return contentItem;
@@ -142,12 +147,33 @@ export default function Questions() {
 
         setOrdenFinal(ordenFinal);
         setObjectFinal(ordenFinal);
-        console.log("orden final ",objetFinal);
+        console.log("orden final ", ordenFinal);
+
+        try {
+            const response = await fetch(`https://us-central1-ryder-consulting.cloudfunctions.net/app/orderCourse/${uidUser}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    orden: ordenFinal
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al actualizar el orden de los cursos');
+            }
+
+
+            console.log('Orden actualizada exitosamente');
+        } catch (error) {
+            console.error('Error al actualizar el orden de los cursos:', error);
+        }
     };
 
     return (
         <Layout>
-        <div className='flex justify-center items-start max-w-screen p-4'>
+        <div className='flex justify-center items-start min-h-screen p-4'>
             <div className='w-full max-w-md'>
                 <h1 className='text-center mb-4 text-xl font-semibold'>JavaScript Quiz</h1>
                 {questions.map((question, index) => (
@@ -174,7 +200,7 @@ export default function Questions() {
                     Submit
                 </button>
             </div>
-            {showModal && (
+            {/* {showModal && (
                 <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
                     <div className='bg-white p-6 rounded-lg'>
                         <h2 className='text-xl font-semibold mb-4'>Results</h2>
@@ -201,7 +227,7 @@ export default function Questions() {
                         </button>
                     </div>
                 </div>
-            )}
+            )} */}
         </div>
         </Layout>
     );

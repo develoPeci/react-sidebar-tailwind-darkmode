@@ -22,26 +22,26 @@ const Navbar = ({ setLoading }) => {
 
   console.log("nombres"+nombres+"apellidos"+apellidos)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userAuth = auth.currentUser;
-        console.log('userAuth', userAuth);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const userAuth = auth.currentUser;
+  //       console.log('userAuth', userAuth);
 
-        if (userAuth) {
-          const userData = await fetchUserData(userAuth.uid);
-          console.log('userData', userData);
-          setUsers(userData);
-        } else {
-          console.log('No hay usuario autenticado.');
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
+  //       if (userAuth) {
+  //         const userData = await fetchUserData(userAuth.uid);
+  //         console.log('userData', userData);
+  //         setUsers(userData);
+  //       } else {
+  //         console.log('No hay usuario autenticado.');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching user data:', error);
+  //     }
+  //   };
 
-    fetchData();
-  }, [auth]);
+  //   fetchData();
+  // }, [auth]);
   
   const handleSignOut = async () => {
     setLoading(true);

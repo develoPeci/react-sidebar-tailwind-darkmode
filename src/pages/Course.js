@@ -4,9 +4,11 @@ import { Button } from "@material-tailwind/react";
 import { MdPlayCircleOutline } from "react-icons/md";
 import { FiClock } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CardCourse = () => {
   const [dataCourse, setCursos] = useState([]);
+  const { orden } = useSelector((state) => state.user);
 
   const obtenerCursos = async () => {
     try {
@@ -27,70 +29,27 @@ const CardCourse = () => {
     obtenerCursos();
   }, []);
 
-  console.log("dataCourse:", dataCourse);
 
-  // const dataCourse = [
-  //   {
-  //     name: "course1",
-  //     title: "course1",
-  //     description: "Lorem Ipsum is simply dummy.",
-  //     imgUrl:
-  //       "https://ryderconsulting.group/wp-content/uploads/2024/05/Diseno-sin-titulo-7-1536x583.png",
-  //   },
-  //   {
-  //     name: "course2",
-  //     title: "course1",
-  //     description: "Lorem Ipsum is simply dummy.",
-  //     imgUrl:
-  //       "https://ryderconsulting.group/wp-content/uploads/2024/03/iStock-1610418910-scaled.jpg",
-  //   },
-  //   {
-  //     name: "course3",
-  //     title: "course1",
-  //     description: "Lorem Ipsum is simply dummy.",
-  //     imgUrl:
-  //       "https://ryderconsulting.group/wp-content/uploads/2024/03/iStock-1334575820-scaled.jpg",
-  //   },
-  //   {
-  //     name: "course4",
-  //     title: "course1",
-  //     description: "Lorem Ipsum is simply dummy.",
-  //     imgUrl:
-  //       "https://ryderconsulting.group/wp-content/uploads/2024/06/Diseno-sin-titulo-8-1536x583.png",
-  //   },
-  //   {
-  //     name: "course5",
-  //     title: "course1",
-  //     description: "Lorem Ipsum is simply dummy.",
-  //     imgUrl:
-  //       "https://ryderconsulting.group/wp-content/uploads/2024/05/Diseno-sin-titulo-7-1536x583.png",
-  //   },
-  //   {
-  //     name: "course6",
-  //     title: "course1",
-  //     description: "Lorem Ipsum is simply dummy.",
-  //     imgUrl:
-  //       "https://ryderconsulting.group/wp-content/uploads/2024/05/Diseno-sin-titulo-7-1536x583.png",
-  //   },
-  //   {
-  //     name: "course7",
-  //     title: "course1",
-  //     description: "Lorem Ipsum is simply dummy.",
-  //     imgUrl:
-  //       "https://ryderconsulting.group/wp-content/uploads/2024/05/Diseno-sin-titulo-7-1536x583.png",
-  //   },
-  //   {
-  //     name: "course8",
-  //     title: "course1",
-  //     description: "Lorem Ipsum is simply dummy.",
-  //     imgUrl:
-  //       "https://ryderconsulting.group/wp-content/uploads/2024/05/Diseno-sin-titulo-7-1536x583.png",
-  //   },
-  // ];
+  const courseMap = dataCourse.reduce((map, course) => {
+    map[course.id] = course;
+    return map;
+  }, {});
+
+  console.info("courseMap: ",courseMap)
+ 
+  const orderedCourses = orden
+    .map((orderedCourse) => courseMap[orderedCourse.id])
+    .filter((course) => course !== undefined);
+
+  console.info("orderedCourses ",orderedCourses)
+
+  if (dataCourse.length === 0 || orden.length === 0) {
+    return <p>Cargando cursos...</p>;
+  }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 p-4 gap-1 md:gap-y-6 ">
-      {dataCourse.map((card, index) => (
+    <div className="grid grid-cols-1 md:grid-cols-3 p-4 gap-1 md:gap-y-6">
+      {orderedCourses.map((card, index) => (
         <div
           key={index}
           className="custom-width mx-auto bg-white shadow-lg rounded-lg overflow-hidden"
@@ -111,7 +70,7 @@ const CardCourse = () => {
               {card.shortDescription}
             </p>
           </div>
-          <div className="px-4 pb-2 flex items-center justify-between ">
+          <div className="px-4 pb-2 flex items-center justify-between">
             <div className="flex items-center gap-1">
               <MdPlayCircleOutline />{card.contentNum}
             </div>
